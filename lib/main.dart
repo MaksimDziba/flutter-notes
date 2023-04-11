@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import './db/database_provide.dart';
 import './models/note_model.dart';
 
-import 'package:flutter_notes/screens/add_note.dart';
+import 'package:flutter_notes/screens/edit_note.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
-        '/AddNote': (context) => AddNote(context),
+        '/EditNote': (context) => EditNote(context),
       },
     );
   }
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Card(
                     child: ListTile(
                       onTap: () {
-                        Navigator.pushNamed(context, '/AddNote', arguments: {
+                        Navigator.pushNamed(context, '/EditNote', arguments: {
                           'isEditMode': true,
                           'note': NoteModel(
                               id: id,
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final emptyNote =
               NoteModel(title: '', body: '', creationDate: DateTime.now());
 
-          Navigator.pushNamed(context, '/AddNote',
+          Navigator.pushNamed(context, '/EditNote',
               arguments: {'isEditMode': false, 'note': emptyNote});
         },
         child: const Icon(Icons.note_add),

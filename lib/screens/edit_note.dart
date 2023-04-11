@@ -3,14 +3,14 @@ import '../db/database_provide.dart';
 import 'package:flutter/material.dart';
 import '../models/note_model.dart';
 
-class AddNote extends StatefulWidget {
+class EditNote extends StatefulWidget {
   final args;
 
-  const AddNote(this.args);
-  _AddNote createState() => new _AddNote();
+  const EditNote(this.args);
+  _EditNote createState() => new _EditNote();
 }
 
-class _AddNote extends State<AddNote> {
+class _EditNote extends State<EditNote> {
   bool isEditMode = false;
 
   String title = '';
