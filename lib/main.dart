@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './db/database_provide.dart';
 import './models/note_model.dart';
+import '../theme/note_colors.dart';
 
 import 'package:flutter_notes/screens/edit_note.dart';
 
@@ -61,9 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   int? id = note.id;
                   String title = note.title;
                   String body = note.body;
+                  String color = note.color;
                   DateTime creationDate = note.creationDate;
 
                   return Card(
+                    color: Color(NoteColors[color]!['l']!),
                     child: ListTile(
                       onTap: () {
                         Navigator.pushNamed(context, '/EditNote', arguments: {
@@ -72,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               id: id,
                               title: title,
                               body: body,
+                              color: color,
                               creationDate: creationDate),
                         });
                       },
@@ -87,8 +91,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final emptyNote =
-              NoteModel(title: '', body: '', creationDate: DateTime.now());
+          final emptyNote = NoteModel(
+              title: '',
+              body: '',
+              color: 'default',
+              creationDate: DateTime.now());
 
           Navigator.pushNamed(context, '/EditNote',
               arguments: {'isEditMode': false, 'note': emptyNote});

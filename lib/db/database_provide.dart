@@ -12,6 +12,7 @@ class DatabaseProvider {
   static const columnId = 'id';
   static const columnTitle = 'title';
   static const columnBody = 'body';
+  static const columnColor = 'color';
   static const columnDate = 'creationDate';
 
   static DatabaseProvider? _instance;
@@ -37,6 +38,7 @@ class DatabaseProvider {
             $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
             $columnTitle TEXT,
             $columnBody TEXT,
+            $columnColor TEXT,
             $columnDate DATE
           )
           ''');
@@ -52,6 +54,7 @@ class DatabaseProvider {
         id: maps[i]['id'],
         title: maps[i]['title'],
         body: maps[i]['body'],
+        color: maps[i]['color'],
         creationDate: DateTime.parse(maps[i]['creationDate']),
       );
     });
@@ -75,5 +78,11 @@ class DatabaseProvider {
     final db = await database;
 
     return await db.delete('notes', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> deleteDatabase() async {
+    final path = join(await getDatabasesPath(), _databaseName);
+
+    databaseFactory.deleteDatabase(path);
   }
 }
