@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_notes/screens/add_note.dart';
-import 'package:flutter_notes/screens/display_note.dart';
 
 import './db/database_provide.dart';
-
 import './models/note_model.dart';
+
+import 'package:flutter_notes/screens/add_note.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -19,7 +18,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/AddNote': (context) => AddNote(context),
-        '/ShowNote': (context) => const ShowNote(),
       },
     );
   }
@@ -68,12 +66,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Card(
                     child: ListTile(
                       onTap: () {
-                        Navigator.pushNamed(context, '/ShowNote',
-                            arguments: NoteModel(
-                                id: id,
-                                title: title,
-                                body: body,
-                                creationDate: creationDate));
+                        Navigator.pushNamed(context, '/AddNote', arguments: {
+                          'isEditMode': true,
+                          'note': NoteModel(
+                              id: id,
+                              title: title,
+                              body: body,
+                              creationDate: creationDate),
+                        });
                       },
                       title: Text(title),
                       subtitle: Text(body),
@@ -87,7 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/AddNote');
+          final emptyNote =
+              NoteModel(title: '', body: '', creationDate: DateTime.now());
+
+          Navigator.pushNamed(context, '/AddNote',
+              arguments: {'isEditMode': false, 'note': emptyNote});
         },
         child: const Icon(Icons.note_add),
       ),

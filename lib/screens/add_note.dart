@@ -11,24 +11,66 @@ class AddNote extends StatefulWidget {
 }
 
 class _AddNote extends State<AddNote> {
+  bool isEditMode = false;
+
   String title = '';
   String body = '';
   DateTime date = DateTime.now();
 
-  TextEditingController titleController = TextEditingController();
-  TextEditingController bodyController = TextEditingController();
+  editNote(NoteModel note) async {
+    if (isEditMode) {
+      await DatabaseProvider().update(note);
+    } else {
+      await DatabaseProvider().create(note);
+    }
 
-  addNote(NoteModel note) async {
-    await DatabaseProvider().create(note);
+    final text = isEditMode
+        ? 'Заметка успешно изменена!'
+        : 'Заметка успешно добавилась!';
 
-    print('Заметка успешно добавилась!');
+    print(text);
+  }
+
+  void deleteNote(int id) async {
+    await DatabaseProvider().delete(id);
+
+    print('Заметка успешно удалена!');
   }
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController titleController = TextEditingController();
+    TextEditingController bodyController = TextEditingController();
+
+    final Map<String, dynamic>? args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+    bool mode = args?['isEditMode'] ?? false;
+    NoteModel? note = args?['note'];
+
+    setState(() {
+      isEditMode = mode;
+    });
+
+    if (isEditMode) {
+      titleController = TextEditingController(text: note!.title);
+      bodyController = TextEditingController(text: note.body);
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Новая заметка'),
+        title: Text(isEditMode ? 'Изменить заметку' : 'Новая заметка'),
+        actions: [
+          if (isEditMode && note != null)
+            IconButton(
+                onPressed: () {
+                  deleteNote(note.id!);
+
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/', (route) => false);
+                },
+                icon: const Icon(Icons.delete)),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -63,10 +105,14 @@ class _AddNote extends State<AddNote> {
               date = DateTime.now();
             });
 
-            NoteModel note =
+            NoteModel model =
                 NoteModel(title: title, body: body, creationDate: date);
 
-            addNote(note);
+            if (isEditMode && note != null) {
+              model.id = note.id;
+            }
+
+            editNote(model);
 
             Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           },
