@@ -1,16 +1,9 @@
 # flutter_notes
 
-A new Flutter project.
+Учебный проект для выполнения лабораторной работы по предмету "Разработка мобильных приложений".
 
-## Getting Started
+## Flutter приложение Заметок.
+1. Заметки хранятся в база данных(sqflite)
+2. Добавлены CRUD операции для заметок
+3. Есть возможность назначать цвета заметкам.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
